@@ -33,10 +33,10 @@ do
         restore_dir="$2"
         shift; shift
         ;;
-	--bedpost_params)
-		bedpost_params="$2"
-		shift; shift
-		;;
+    --bedpost_params)
+        bedpost_params="$2"
+        shift; shift
+        ;;
     --outdir)
         outdir="$2"
         shift; shift
