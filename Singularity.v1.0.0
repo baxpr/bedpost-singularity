@@ -1,9 +1,15 @@
 Bootstrap: docker
 From: ubuntu:18.04
 
+%help
+
+  Runs FSL's bedpost on outputs of dtiQA_v6. See /opt/README.md
+
+
 %files
 
-  src /opt
+  src        /opt
+  README.md  /opt
   
 
 %post
