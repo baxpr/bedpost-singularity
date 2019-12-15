@@ -54,6 +54,7 @@ From: ubuntu:18.04
   export PATH=${FSLDIR}/bin:${PATH}
 
   # Run the FSL python installer
+  cp /opt/src/fslpython_install.sh ${FSLDIR}/etc/fslconf
   ${FSLDIR}/etc/fslconf/fslpython_install.sh
 
   # Update fsleyes per https://users.fmrib.ox.ac.uk/~paulmc/fsleyes/userdoc/latest/install.html
