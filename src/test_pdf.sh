@@ -22,6 +22,14 @@ fsleyes render -of restore_v1.png \
     "${restore_dir}"/v1 -ot linevector
 
 
+# NO HELP
+# From here: https://git.fmrib.ox.ac.uk/samh/profumo/blob/d1f883bf49895542b2f1b6a75650f12b3a4ce67a/Docker/Dockerfile
+# freeglut                freeglut3
+# gtk2                    gtk+2.0 (libgtk2.0-0 only?)
+# mesa-dri-drivers        libgl1-mesa-dri
+# xorg-x11-server-Xvfb    xvfb
+
+
 # Works in dwi-reorder fsl 6.0.2:
 xvfb-run -n $(($$ + 99)) -s '-screen 0 1600x1200x24 -ac +extension GLX' \
 fsleyes render \

@@ -56,6 +56,11 @@ From: ubuntu:18.04
   # Run the FSL python installer
   ${FSLDIR}/etc/fslconf/fslpython_install.sh
 
+  # Update fsleyes per https://users.fmrib.ox.ac.uk/~paulmc/fsleyes/userdoc/latest/install.html
+  rm $FSLDIR/bin/fsleyes
+  rm -r $FSLDIR/bin/FSLeyes
+  $FSLDIR/fslpython/bin/conda install -n fslpython -c conda-forge fsleyes
+
   # Headless X11 support
   apt-get install -y xvfb
   
