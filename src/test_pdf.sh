@@ -21,6 +21,9 @@ fsleyes render -of restore_v1.png \
     "${restore_dir}"/fa \
     "${restore_dir}"/v1 -ot linevector
 
+# Conda frozen env issue:
+# https://github.com/conda/conda/issues/9367
+# https://github.com/conda/conda/issues/9367#issuecomment-560343340
 
 # NO HELP
 # From here: https://git.fmrib.ox.ac.uk/samh/profumo/blob/d1f883bf49895542b2f1b6a75650f12b3a4ce67a/Docker/Dockerfile
