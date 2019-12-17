@@ -3,7 +3,7 @@
 # This script installs miniconda, and configures a
 # python environment with all of the dependencies
 # required by FSL. This involves:
-# 
+#
 #  1. Downloading the miniconda install script from https://repo.continuum.io
 #
 #  2. Installing miniconda to $FSLDIR/fslpython/
@@ -19,19 +19,20 @@
 # no arguments)
 
 # Where is this script?
+set -o pipefail
 script_dir=$( cd $(dirname $0) ; pwd)
 
 # Set some defaults
 OPTIND=1
 fsl_dir=""
 quiet=0
+debug=0
 dropprivileges=0
-miniconda_ver=4.6.14  # was latest. Older version to deal with some fsleyes install conflicts
 
 # Have we been called by sudo?
 if [ ! -z "${SUDO_UID}" ]; then
     dropprivileges=1
-fi    
+fi
 
 function syntax {
     echo "fslpython_install.sh [-f <FSLDIR>] [-q]"
@@ -49,6 +50,8 @@ while getopts "h?qf:" opt; do
     q)  quiet=1
         ;;
     f)  fsl_dir=${OPTARG}
+        ;;
+    d)  debug=1
         ;;
     esac
 done
@@ -110,6 +113,9 @@ if [ $? -ne 0 ]; then
     echo "Failed to create temporary directory"
     exit 2
 fi
+if [ $debug -eq 1 ]; then
+    echo "Debug log: $miniconda_tmp" >&2
+fi
 miniconda_installer="${miniconda_tmp}/fslpython_miniconda_installer.sh"
 miniconda_install_log="${miniconda_tmp}/fslpython_miniconda_installer.log"
 miniconda_root_dir="${fsl_dir}/fslpython"
@@ -122,25 +128,35 @@ if [ "$platform" = "Linux" ]; then
         echo "We only support 64 bit Linux" >&2
         exit 2
     fi
-    
-    miniconda_script="Miniconda3-${miniconda_ver}-Linux-x86_64.sh"
-    dl_cmd="/usr/bin/wget"
-    dl_cmd_opts=""
-    dl_out="-O"
-    dl_quiet="--quiet"
+
+    miniconda_script="Miniconda3-latest-Linux-x86_64.sh"
 elif [ "$platform" = "Darwin" ]; then
-    miniconda_script="Miniconda3-${miniconda_ver}-MacOSX-x86_64.sh"
-    dl_cmd="/usr/bin/curl"
-    dl_out="-o"
-    dl_cmd_opts="--fail"
-    dl_quiet="-s"
+    miniconda_script="Miniconda3-latest-MacOSX-x86_64.sh"
 else
     echo "Unknown platform" >&2
     exit 2
 fi
 
+# Find a downloader...
+dl_cmd=$(which wget 2>> "${miniconda_install_log}")
+if [ $? -eq 1 ]; then
+    dl_cmd=$(which curl 2>> "${miniconda_install_log}")
+    if [ $? -eq 1 ]; then
+        echo "Unable to locate wget or curl" >&2
+        cat "${miniconda_install_log}" >&2
+        exit 2
+    fi
+    dl_cmd_opts="--fail"
+    dl_out="-o"
+    dl_quiet="-s"
+else
+    dl_cmd_opts=""
+    dl_out="-O"
+    dl_quiet="--quiet"
+fi
+
 if [ ${quiet} -eq 1 ]; then
-    dl_cmd_opts="${dl_quiet} -s"
+    dl_cmd_opts="${dl_cmd_opts} ${dl_quiet}"
 fi
 
 drop_sudo ${dl_cmd} ${dl_out} "${miniconda_installer}" ${dl_cmd_opts} \
@@ -162,14 +178,17 @@ fi
 /usr/bin/env bash ${miniconda_installer} -b -p "${miniconda_root_dir}" \
     2>> "${miniconda_install_log}" | \
     ${script_dir}/progress.sh 26 ${quiet} >> "${miniconda_install_log}"
- 
+
 if [ $? -ne 0 ]; then
     echo "Failed to install Miniconda - see ${miniconda_install_log} for details" >&2
     exit 3
 fi
 rm "${miniconda_installer}"
 
-
+"${miniconda_bin_dir}/conda"  config --file "${miniconda_root_dir}"/.condarc --set safety_checks warn
+"${miniconda_bin_dir}/conda"  config --file "${miniconda_root_dir}"/.condarc --set remote_read_timeout_secs 240
+"${miniconda_bin_dir}/conda"  config --file "${miniconda_root_dir}"/.condarc --set remote_connect_timeout_secs 20
+"${miniconda_bin_dir}/conda"  config --file "${miniconda_root_dir}"/.condarc --set remote_max_retries 10
 ##############################
 # Create fslpython environment
 ##############################
@@ -195,6 +214,16 @@ fi
 ln -sf "${fslpython_env_dir}/bin/python" "${fsl_dir}/bin/fslpython"
 if [ -e "${fslpython_env_dir}/bin/ipython" ]; then
     ln -sf "${fslpython_env_dir}/bin/ipython" "${fsl_dir}/bin/fslipython"
+fi
+
+if [ -e "${fslpython_env_dir}/bin/pythonw" ]; then
+  ln -sf "${fslpython_env_dir}/bin/pythonw" "${fsl_dir}/bin/fslpythonw"
+else
+  ln -sf "${fslpython_env_dir}/bin/python" "${fsl_dir}/bin/fslpythonw"
+fi
+
+if [ ${debug} -ne 1 ]; then
+    echo "${miniconda_install_log}"
 fi
 
 rm "${miniconda_install_log}"
