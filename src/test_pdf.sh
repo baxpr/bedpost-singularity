@@ -13,7 +13,7 @@ LIBGL_DEBUG=verbose xvfb-run -n $(($$ + 99)) -s '-screen 0 1600x1200x24 -ac +ext
 # libgl1-mesa-dev doesn't fix
 # libicu doesn't fix
 # libglu1-mesa-dev doesn't fix
-restore_dir=../INPUTS_FAILED
+restore_dir=../INPUTS_FAILED/RESTORE
 dims="2400 1200"
 xvfb-run -n $(($$ + 99)) -s '-screen 0 1600x1200x24 -ac +extension GLX' \
 fsleyes render -of restore_v1.png \

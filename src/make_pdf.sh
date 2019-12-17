@@ -10,11 +10,15 @@ do
         shift; shift
         ;;
     --restore_dir)
-        restore_dir="$2"
+        restore_dir=`realpath "$2"`
+        shift; shift
+        ;;
+    --bedpost_dir)
+        bedpost_dir=`realpath "$2"`
         shift; shift
         ;;
     --outdir)
-        outdir="$2"
+        outdir=`realpath "$2"`
         shift; shift
         ;;
     *)
@@ -22,6 +26,12 @@ do
         ;;
   esac
 done
+
+echo Making PDF:
+echo info_string = "${info_string}"
+echo restore_dir = "${restore_dir}"
+echo bedpost_dir = "${bedpost_dir}"
+echo outdir = "${outdir}"
 
 
 # Get to working directory
@@ -36,12 +46,14 @@ dims="2400 1200"
 ### RESTORE PNGs ###
 
 # V1
+echo V1
 fsleyes render -of restore_v1.png \
     -hc -hl -xz 1200 -yz 1200 -zz 1200 --size ${dims} \
     "${restore_dir}"/fa \
     "${restore_dir}"/v1 -ot linevector
 
 # TENSORS
+echo TENSORS
 fsleyes render -of restore_tensors.png \
     -vl 64 65 45 --hidex --hidez -hc -hl -yz 1700 --size ${dims} \
     "${restore_dir}"/fa \
@@ -51,38 +63,42 @@ fsleyes render -of restore_tensors.png \
 ### BEDPOSTX PNGs ###
 
 # DYADS1
+echo DYADS1
 fsleyes render -of bedpost_dyads.png \
     -hc -hl -xz 1200 -yz 1200 -zz 1200 --size ${dims} \
-    bedpostx.bedpostX/dyads1 \
+    "${bedpost_dir}"/dyads1 \
     -ot rgbvector
 
 # DYADS1 MODULATED BY MEAN F1
+echo DYADS1 MOD
 fsleyes render -of bedpost_dyads_mod.png \
     -hc -hl -xz 1200 -yz 1200 -zz 1200 --size ${dims} \
-    bedpostx.bedpostX/dyads1.nii.gz \
+    "${bedpost_dir}"/dyads1.nii.gz \
 	    -ot rgbvector -b 70 -c 50 \
-        -mo bedpostx.bedpostX/mean_f1samples.nii.gz 
+        -mo "${bedpost_dir}"/mean_f1samples.nii.gz 
 
 # VECTOR MAP
+echo VECTOR MAP 1
 fsleyes render -of bedpost_vecs1 \
     -vl 64 65 45 --hidex --hidez -hc -hl -yz 1500 --size ${dims} \
-    bedpostx.bedpostX/mean_fsumsamples.nii.gz \
-    bedpostx.bedpostX/dyads1.nii.gz \
+    "${bedpost_dir}"/mean_fsumsamples.nii.gz \
+    "${bedpost_dir}"/dyads1.nii.gz \
         -ot linevector -xc 1 0 0 -yc 1 0 0 -zc 1 0 0 -lw 2 \
-    bedpostx.bedpostX/dyads2_thr0.05.nii.gz \
+    "${bedpost_dir}"/dyads2_thr0.05.nii.gz \
         -ot linevector -xc 0 1 0 -yc 0 1 0 -zc 0 1 0 -lw 2 \
-    bedpostx.bedpostX/dyads3_thr0.05.nii.gz \
+    "${bedpost_dir}"/dyads3_thr0.05.nii.gz \
         -ot linevector -xc 0 0 1 -yc 0 0 1 -zc 0 0 1 -lw 2
 
 # VECTOR MAP
+echo VECTOR MAP 2
 fsleyes render -of bedpost_vecs2 \
     -vl 65 67 45 --hidex --hidey -hc -hl -zz 2000 --size ${dims} \
-    bedpostx.bedpostX/mean_fsumsamples.nii.gz \
-    bedpostx.bedpostX/dyads1.nii.gz \
+    "${bedpost_dir}"/mean_fsumsamples.nii.gz \
+    "${bedpost_dir}"/dyads1.nii.gz \
         -ot linevector -xc 1 0 0 -yc 1 0 0 -zc 1 0 0 -lw 2 \
-    bedpostx.bedpostX/dyads2_thr0.05.nii.gz \
+    "${bedpost_dir}"/dyads2_thr0.05.nii.gz \
         -ot linevector -xc 0 1 0 -yc 0 1 0 -zc 0 1 0 -lw 2 \
-    bedpostx.bedpostX/dyads3_thr0.05.nii.gz \
+    "${bedpost_dir}"/dyads3_thr0.05.nii.gz \
         -ot linevector -xc 0 0 1 -yc 0 0 1 -zc 0 0 1 -lw 2
 
 

@@ -67,7 +67,7 @@ bedpostx "${outdir}"/bedpostx ${bedpost_params}
 # Make PDF
 make_pdf.sh \
   --info_string "${project} ${subject} ${session} ${scan}" \
-  --restore_dir "${restore_dir}" \
+  --restore_dir "${restore_dir}" --bedpost_dir "${outdir}"/bedpostx.bedpostX \
   --outdir "${outdir}"
 
 
