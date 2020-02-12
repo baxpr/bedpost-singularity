@@ -1,4 +1,7 @@
 #!/bin/bash
+
+export PATH=/wkdir/src:$PATH
+
 wrapper.sh \
 --project TESTPROJ \
 --subject TESTSUBJ \
