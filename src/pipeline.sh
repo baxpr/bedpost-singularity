@@ -10,64 +10,61 @@ do
   key="$1"
   case $key in
     --project)
-        project="$2"
-        shift; shift
-        ;;
+        export project="$2"; shift; shift ;;
     --subject)
-        subject="$2"
-        shift; shift
-        ;;
+        export subject="$2"; shift; shift ;;
     --session)
-        session="$2"
-        shift; shift
-        ;;
+        export session="$2"; shift; shift ;;
     --scan)
-        scan="$2"
-        shift; shift
-        ;;
-    --preprocessed_dir)
-        preprocessed_dir="$2"
-        shift; shift
-        ;;
-    --restore_dir)
-        restore_dir="$2"
-        shift; shift
-        ;;
+        export scan="$2"; shift; shift ;;
+    --dwi_niigz)
+        export dwi_niigz="$2"; shift; shift ;;
+    --bval_txt)
+        export bval_txt="$2"; shift; shift ;;
+    --bvec_txt)
+        export bvec_txt="$2"; shift; shift ;;
+    --mask_niigz)
+        export mask_niigz="$2"; shift; shift ;;
+    --fa_niigz)
+        export fa_niigz="$2"; shift; shift ;;
+    --v1_niigz)
+        export v1_niigz="$2"; shift; shift ;;
+    --tensor_niigz)
+        export tensor_niigz="$2"; shift; shift ;;
     --bedpost_params)
-        bedpost_params="$2"
-        shift; shift
-        ;;
+        export bedpost_params="$2"; shift; shift ;;
     --outdir)
-        outdir="$2"
-        shift; shift
-        ;;
+        export outdir="$2"; shift; shift ;;
     *)
-        shift
-        ;;
+        shift ;;
   esac
 done
 
 # Inputs report
 echo "${project} ${subject} ${session} ${scan}"
-echo "PREPROCESSED:   $preprocessed_dir"
-echo "RESTORE:        $restore_dir"
+echo "dwi_niigz:      $dwi_niigz"
+echo "bvec_txt:       $bvec_txt"
+echo "bval_txt:       $bval_txt"
+echo "mask_niigz:     $mask_niigz"
+echo "fa_niigz:       $fa_niigz"
+echo "v1_niigz:       $v1_niigz"
+echo "tensor_niigz:   $tensor_niigz"
 echo "bedpost params: $bedpost_params"
 echo "outdir:         $outdir"
 
 # Set up bedpost working directory (fsl "subject directory") and copy/rename inputs
 mkdir -p "${outdir}"/bedpostx
-cp ${preprocessed_dir}/dwmri.nii.gz "${outdir}"/bedpostx/data.nii.gz
-cp ${preprocessed_dir}/mask.nii.gz "${outdir}"/bedpostx/nodif_brain_mask.nii.gz
-cp ${preprocessed_dir}/dwmri.bval "${outdir}"/bedpostx/bvals
-cp ${preprocessed_dir}/dwmri.bvec "${outdir}"/bedpostx/bvecs
+cp "${dwi_niigz}" "${outdir}"/bedpostx/data.nii.gz
+cp "${mask_niigz}" "${outdir}"/bedpostx/nodif_brain_mask.nii.gz
+cp "${bval_txt}" "${outdir}"/bedpostx/bvals
+cp "${bvec_txt}" "${outdir}"/bedpostx/bvecs
 
 # Run bedpost
 bedpostx "${outdir}"/bedpostx ${bedpost_params}
+export bedpost_dir="${outdir}"/bedpostx.bedpostX
 
 # Make PDF
 make_pdf.sh \
-  --info_string "${project} ${subject} ${session} ${scan}" \
-  --restore_dir "${restore_dir}" --bedpost_dir "${outdir}"/bedpostx.bedpostX \
+  --restore_dir "${restore_dir}"  \
   --outdir "${outdir}"
-
 

@@ -1,37 +1,8 @@
 #!/bin/bash
 
-# Parse options
-while [[ $# -gt 0 ]]
-do
-  key="$1"
-  case $key in
-    --info_string)
-        info_string="$2"
-        shift; shift
-        ;;
-    --restore_dir)
-        restore_dir=`realpath "$2"`
-        shift; shift
-        ;;
-    --bedpost_dir)
-        bedpost_dir=`realpath "$2"`
-        shift; shift
-        ;;
-    --outdir)
-        outdir=`realpath "$2"`
-        shift; shift
-        ;;
-    *)
-        shift
-        ;;
-  esac
-done
-
 echo Making PDF:
-echo info_string = "${info_string}"
-echo restore_dir = "${restore_dir}"
+info_string="${project} ${subject} ${session} ${scan}"
 echo bedpost_dir = "${bedpost_dir}"
-echo outdir = "${outdir}"
 
 
 # Get to working directory
@@ -43,21 +14,21 @@ cd "${outdir}"
 dims="2400 1200"
 
 
-### RESTORE PNGs ###
+### DTI PNGs ###
 
 # V1
 echo V1
 fsleyes render -of restore_v1.png \
     -hc -hl -xz 1200 -yz 1200 -zz 1200 --size ${dims} \
-    "${restore_dir}"/fa \
-    "${restore_dir}"/v1 -ot linevector
+    "${fa_niigz}" \
+    "${v1_niigz}" -ot linevector
 
 # TENSORS
 echo TENSORS
 fsleyes render -of restore_tensors.png \
     -vl 64 65 45 --hidex --hidez -hc -hl -yz 1700 --size ${dims} \
-    "${restore_dir}"/fa \
-    "${restore_dir}"/dt -ot tensor
+    "${fa_niigz}" \
+    "${tensor_niigz}" -ot tensor
 
 
 ### BEDPOSTX PNGs ###
