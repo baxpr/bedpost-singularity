@@ -10,7 +10,6 @@ cd "${outdir}"
 
 
 # PNG dimensions
-#dims="600 300"
 dims="2400 1200"
 
 

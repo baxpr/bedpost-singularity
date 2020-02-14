@@ -64,7 +64,5 @@ bedpostx "${outdir}"/bedpostx ${bedpost_params}
 export bedpost_dir="${outdir}"/bedpostx.bedpostX
 
 # Make PDF
-make_pdf.sh \
-  --restore_dir "${restore_dir}"  \
-  --outdir "${outdir}"
+make_pdf.sh
 
