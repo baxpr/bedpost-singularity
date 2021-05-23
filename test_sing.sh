@@ -4,7 +4,7 @@ singularity run \
 --cleanenv \
 --bind INPUTS:/INPUTS \
 --bind OUTPUTS:/OUTPUTS \
-baxpr-bedpost-singularity-master-v1.0.0.simg \
+bedpost.simg \
 --project TESTPROJ \
 --subject TESTSUBJ \
 --session TESTSESS \

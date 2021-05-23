@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-echo "fslpython_install.sh"
-if [ "`uname -s`" = "Linux" ]; then
-   echo "configure_eddy.sh"
-fi
-if [ "`uname -s`" = "Darwin" ]; then 
-    echo "make_applications_links.sh"
-fi
