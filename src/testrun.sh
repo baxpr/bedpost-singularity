@@ -7,7 +7,7 @@ wrapper.sh \
 --subject TESTSUBJ \
 --session TESTSESS \
 --scan TESTSCAN \
---bedpost_params "--nf=3 --fudge=1 --bi=1000" \
+--bedpost_params "-n 3 --model=1 -b 1000 -w 1" \
 --dwi_niigz ../INPUTS/eddy.nii.gz \
 --bval_txt ../INPUTS/eddy.bvals \
 --bvec_txt ../INPUTS/eddy.eddy_rotated_bvecs \

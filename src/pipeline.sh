@@ -2,7 +2,7 @@
 
 # Initialize bedpost defaults (will be changed later if specified 
 # with --bedpost_params)
-bedpost_params="--nf=3 --fudge=1 --bi=1000"
+bedpost_params="-n 3 --model=1 -b 1000 -w 1"
 
 # Parse options
 while [[ $# -gt 0 ]]
