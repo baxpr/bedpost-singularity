@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo Making PDF:
-info_string="${project} ${subject} ${session} ${scan}"
 echo bedpost_dir = "${bedpost_dir}"
 
 

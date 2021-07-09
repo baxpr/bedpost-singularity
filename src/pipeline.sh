@@ -1,22 +1,16 @@
 #!/bin/bash
 
-# Initialize bedpost defaults (will be changed later if specified 
-# with --bedpost_params)
-bedpost_params="-n 3 --model=1 -b 1000 -w 1"
+# Initialize defaults
+export label_info="UNKNOWN SCAN"
+export bedpost_params="-n 3 --model=1 -b 1000 -w 1"
 
 # Parse options
 while [[ $# -gt 0 ]]
 do
   key="$1"
   case $key in
-    --project)
+    --label_info)
         export project="$2"; shift; shift ;;
-    --subject)
-        export subject="$2"; shift; shift ;;
-    --session)
-        export session="$2"; shift; shift ;;
-    --scan)
-        export scan="$2"; shift; shift ;;
     --dwi_niigz)
         export dwi_niigz="$2"; shift; shift ;;
     --bval_txt)
@@ -36,12 +30,13 @@ do
     --outdir)
         export outdir="$2"; shift; shift ;;
     *)
+        echo "Unknown input ${1}"
         shift ;;
   esac
 done
 
 # Inputs report
-echo "${project} ${subject} ${session} ${scan}"
+echo "${label_info}"
 echo "dwi_niigz:      $dwi_niigz"
 echo "bvec_txt:       $bvec_txt"
 echo "bval_txt:       $bval_txt"
