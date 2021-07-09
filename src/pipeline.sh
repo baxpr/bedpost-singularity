@@ -10,7 +10,7 @@ do
   key="$1"
   case $key in
     --label_info)
-        export project="$2"; shift; shift ;;
+        export label_info="$2"; shift; shift ;;
     --dwi_niigz)
         export dwi_niigz="$2"; shift; shift ;;
     --bval_txt)
