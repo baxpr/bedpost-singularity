@@ -19,12 +19,13 @@ fsleyes render -of restore_v1.png \
     "${fa_niigz}" \
     "${v1_niigz}" -ot linevector
 
-# TENSORS
+# TENSORS - fsleyes can't handle nans so we fix that first
 echo TENSORS
+fslmaths "${tensor_niigz}" -nan tensor
 fsleyes render -of restore_tensors.png \
     -vl 64 65 45 --hidex --hidez -hc -hl -yz 1700 --size ${dims} \
     "${fa_niigz}" \
-    "${tensor_niigz}" -ot tensor
+    tensor -ot tensor
 
 
 ### BEDPOSTX PNGs ###
@@ -40,16 +41,16 @@ fsleyes render -of bedpost_dyads.png \
 echo DYADS1 MOD
 fsleyes render -of bedpost_dyads_mod.png \
     -hc -hl -xz 1200 -yz 1200 -zz 1200 --size ${dims} \
-    "${bedpost_dir}"/dyads1.nii.gz \
+    "${bedpost_dir}"/dyads1 \
 	    -ot rgbvector -b 70 -c 50 \
-        -mo "${bedpost_dir}"/mean_f1samples.nii.gz 
+        -mo "${bedpost_dir}"/mean_f1samples 
 
 # VECTOR MAP
 echo VECTOR MAP 1
-fsleyes render -of bedpost_vecs1 \
+fsleyes render -of bedpost_vecs1.png \
     -vl 64 65 45 --hidex --hidez -hc -hl -yz 1500 --size ${dims} \
-    "${bedpost_dir}"/mean_fsumsamples.nii.gz \
-    "${bedpost_dir}"/dyads1.nii.gz \
+    "${bedpost_dir}"/mean_fsumsamples \
+    "${bedpost_dir}"/dyads1 \
         -ot linevector -xc 1 0 0 -yc 1 0 0 -zc 1 0 0 -lw 2 \
     "${bedpost_dir}"/dyads2_thr0.05.nii.gz \
         -ot linevector -xc 0 1 0 -yc 0 1 0 -zc 0 1 0 -lw 2 \
@@ -58,10 +59,10 @@ fsleyes render -of bedpost_vecs1 \
 
 # VECTOR MAP
 echo VECTOR MAP 2
-fsleyes render -of bedpost_vecs2 \
+fsleyes render -of bedpost_vecs2.png \
     -vl 65 67 45 --hidex --hidey -hc -hl -zz 2000 --size ${dims} \
-    "${bedpost_dir}"/mean_fsumsamples.nii.gz \
-    "${bedpost_dir}"/dyads1.nii.gz \
+    "${bedpost_dir}"/mean_fsumsamples \
+    "${bedpost_dir}"/dyads1 \
         -ot linevector -xc 1 0 0 -yc 1 0 0 -zc 1 0 0 -lw 2 \
     "${bedpost_dir}"/dyads2_thr0.05.nii.gz \
         -ot linevector -xc 0 1 0 -yc 0 1 0 -zc 0 1 0 -lw 2 \
@@ -103,3 +104,6 @@ page3.png
 
 convert page1.png page2.png page3.png bedpost.pdf
 
+
+# Clean up
+#rm *.png tmp2.nii.gz tmp3.nii.gz tensor.nii.gz
