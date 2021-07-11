@@ -78,7 +78,7 @@ convert \
 -gravity center \( bedpost_vecs2.png -resize 2400x1200 \) -geometry +0+650 -composite \
 -gravity center -pointsize 48 -annotate +0-1300 "Dyad vectors (bedpostx)" \
 -gravity SouthEast -pointsize 48 -annotate +50+50 "$(date)" \
--gravity NorthWest -pointsize 48 -annotate +50+50 "${info_string}" \
+-gravity NorthWest -pointsize 48 -annotate +50+50 "${label_info}" \
 page1.png
 
 # Page 2, bedpost dyads
@@ -88,7 +88,7 @@ convert \
 -gravity center \( bedpost_dyads_mod.png -resize 2400x1200 \) -geometry +0+650 -composite \
 -gravity center -pointsize 48 -annotate +0-1300 "First dyad (bedpostx)" \
 -gravity SouthEast -pointsize 48 -annotate +50+50 "$(date)" \
--gravity NorthWest -pointsize 48 -annotate +50+50 "${info_string}" \
+-gravity NorthWest -pointsize 48 -annotate +50+50 "${label_info}" \
 page2.png
 
 # Page 3, DTI
@@ -98,11 +98,11 @@ convert \
 -gravity center \( restore_tensors.png -resize 2400x1200 \) -geometry +0+650 -composite \
 -gravity center -pointsize 48 -annotate +0-1300 "Tensor reconstruction (dtifit)" \
 -gravity SouthEast -pointsize 48 -annotate +50+50 "$(date)" \
--gravity NorthWest -pointsize 48 -annotate +50+50 "${info_string}" \
+-gravity NorthWest -pointsize 48 -annotate +50+50 "${label_info}" \
 page3.png
 
 convert page1.png page2.png page3.png bedpost.pdf
 
 
 # Clean up
-#rm *.png tmp2.nii.gz tmp3.nii.gz tensor.nii.gz
+rm *.png
