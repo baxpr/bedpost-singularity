@@ -2,7 +2,7 @@
 
 # Initialize defaults
 export label_info="UNKNOWN SCAN"
-export bedpost_params="-n 3 --model=1 -b 1000 -w 1"
+export bedpost_params="-n 3 -model 1 -b 1000 -w 1"
 
 # Parse options
 while [[ $# -gt 0 ]]
