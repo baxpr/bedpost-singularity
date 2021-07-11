@@ -3,10 +3,8 @@
 echo Making PDF:
 echo bedpost_dir = "${bedpost_dir}"
 
-
 # Get to working directory
 cd "${outdir}"
-
 
 # PNG dimensions
 dims="2400 1200"
@@ -82,7 +80,6 @@ convert \
 -gravity SouthEast -pointsize 48 -annotate +50+50 "$(date)" \
 -gravity NorthWest -pointsize 48 -annotate +50+50 "${info_string}" \
 page1.png
-
 
 # Page 2, bedpost dyads
 convert \
