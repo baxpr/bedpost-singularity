@@ -4,7 +4,7 @@ singularity run --contain --cleanenv \
     --bind INPUTS:/tmp \
     --bind INPUTS:/INPUTS \
     --bind OUTPUTS:/OUTPUTS \
-    bedpost-singularity_v3.0.0-beta.simg \
+    bedpost-singularity_v3.0.0-beta1.simg \
     --label_info 'TEST LABEL' \
     --dwi_niigz /INPUTS/PREPROCESSED/dwmri.nii.gz \
     --bvec_txt /INPUTS/PREPROCESSED/dwmri.bvec \
